@@ -21,7 +21,7 @@ for file in files_B:
         cases.append(case)
 
 # np.random.seed(41)
-# print(len(cases))
+print(len(cases))
 # i = 12
 # # for i in range(len(cases[1:2])):
 # print(cases[i]['name'])
@@ -29,6 +29,8 @@ for file in files_B:
 # test.compute(100, 50, 1.2, 0.1, 100, 50)
 # print()
 
-i = 7
-j = 9
-df = get_all_results(cases[i: j], 'results' + str(i) + '_' + str(j - 1) + '.csv')
+# i = 7
+# j = 9
+# df = get_all_results(cases[i: j], 'results' + str(i) + '_' + str(j - 1) + '.csv')
+
+get_all_results(cases[0:2])
