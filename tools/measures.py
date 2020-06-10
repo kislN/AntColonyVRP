@@ -31,9 +31,9 @@ def get_all_results(cases):
         best_sol = None
         for epochs in [10, 50, 200]:
             for n_ants in [10, 50, 100]:
-                for alpha in [0.5, 0.9, 4]:
-                    for beta in [0.1, 0.5, 4]:
-                        for p in [0.05, 0.5, 50]:
+                for alpha in [0.1, 0.5, 0.9]:
+                    for beta in [0.1, 0.5, 0.9]:
+                        for p in [0.05, 0.5, 30]:
                             for init_pher in [0.5, 10]:
                                 # print (case['name'])
                                 # print(epochs)
