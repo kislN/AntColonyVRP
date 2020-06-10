@@ -1,5 +1,4 @@
 import numpy as np
-np.random.seed(42)
 from copy import deepcopy
 import matplotlib.pyplot as plt
 from time import time
@@ -49,7 +48,8 @@ class VPR:
         self.pheromone_map[i, j] += self.p * self.init_pheromone_value / self.adj_matrix[i, j]
         self.pheromone_map[j, i] = self.pheromone_map[i, j]
         self.raw_prob_matrix[i, j] = self.raw_prob_matrix[j, i] = (self.pheromone_map[i, j] ** self.alpha) * \
-                                                                  (self.adj_matrix[i, j]**self.beta)
+                                                                  (self.adj_matrix[i, j] ** self.beta)
+
 
     def global_update(self, best_solution, best_cost):
         for one_path in best_solution:

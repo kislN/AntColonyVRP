@@ -19,7 +19,7 @@ def get_result(case, iterations=3, **params):
         if case_class.final_cost < cost:
             cost = case_class.final_cost
             solution = case_class.final_sol
-    delta_time = round(delta_time / iterations, 8)
+    delta_time = round(delta_time / iterations, 4)
     return (delta_time, cost, solution)
 
 def get_all_results(cases):
@@ -29,17 +29,25 @@ def get_all_results(cases):
     for case in tqdm(cases):
         best_cost = 1e+5
         best_sol = None
-        for epochs in [10]: #, 50, 200]:
-            for n_ants in [10]:# , 50, 100]:
-                for alpha in [0.5]: #, 0.9, 15]:
-                    for beta in [0.5]: #, 0.1, 15]:
-                        for p in [5]: #, 0.05, 0.5, 50]:
-                            for init_pher in [0.5]: #, 10]:
+        for epochs in [10, 50, 200]:
+            for n_ants in [10, 50, 100]:
+                for alpha in [0.5, 0.9, 4]:
+                    for beta in [0.1, 0.5, 4]:
+                        for p in [0.05, 0.5, 50]:
+                            for init_pher in [0.5, 10]:
+                                # print (case['name'])
+                                # print(epochs)
+                                # print(n_ants)
+                                # print(alpha)
+                                # print(beta)
+                                # print(p)
+                                # print(init_pher)
                                 result = get_result(case, iterations=iters, epochs=epochs, n_ants=n_ants, alpha=alpha,
                                                     beta=beta, p=p, init_pheromone=init_pher)
                                 df = df.append(pd.Series([case['name'], epochs, n_ants, alpha, beta, p, init_pher,
                                                           result[0], round(result[1], 4), case['opt']],
                                                          index=df.columns), ignore_index=True)
+
                                 if best_cost > result[1]:
                                     best_cost = result[1]
                                     best_sol = result[2]

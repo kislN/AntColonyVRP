@@ -22,10 +22,10 @@ for file in files_B:
 
 # print(len(cases))
 # i = 11
-# for i in range(len(cases)):
+# for i in range(len(cases[0:1])):
 #     print(cases[i]['name'])
 #     test = VPR(cases[i]['n_trucks'], cases[i]['dimension'], cases[i]['capacity'], cases[i]['demands'], cases[i]['adj_matrix'])
-#     test.compute()
+#     test.compute(10, 10, 4, 0.1, 0.5, 10)
 #     print()
 
 df = get_all_results(cases)
