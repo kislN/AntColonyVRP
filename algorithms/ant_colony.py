@@ -130,13 +130,13 @@ class VPR:
                 if self.final_cost > best_cost:
                     self.final_cost = best_cost
                     self.final_sol = best_solution
-                # print(f'Epoch: {epoch} | time: {round(time() - time_s, 4)}| best cost: {best_cost}')
-
-        # print(self.alpha, self.beta, self.p, self.k)
+        #         print(f'Epoch: {epoch} | time: {round(time() - time_s, 4)}| best cost: {best_cost}')
+        #
+        # print(self.alpha, self.beta, self.p, self.n_ants)
         # plt.plot(np.arange(len(show_epoch)), np.array(show_epoch))
         # plt.show()
-        if self.final_sol is None:
-            print('WORLD WIDE FUCK')
+        # if self.final_sol is None:
+        #     print('WORLD WIDE FUCK')
         # print(self.final_sol)
         # print(f'Cost: {self.final_cost}')
 

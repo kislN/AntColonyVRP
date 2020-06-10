@@ -22,19 +22,19 @@ def get_result(case, iterations=3, **params):
     delta_time = round(delta_time / iterations, 4)
     return (delta_time, cost, solution)
 
-def get_all_results(cases):
+def get_all_results(cases, results_file):
     df = pd.DataFrame(columns=['case', 'epochs', 'n_ants', 'alpha', 'beta', 'p', 'init_pher', 'mean_time',
                                'found_cost', 'opt_cost'])
     iters = 1
     for case in tqdm(cases):
         best_cost = 1e+5
         best_sol = None
-        for epochs in [10, 50, 200]:
-            for n_ants in [10, 50, 100]:
-                for alpha in [0.1, 0.5, 0.9]:
-                    for beta in [0.1, 0.5, 0.9]:
-                        for p in [0.05, 0.5, 30]:
-                            for init_pher in [0.5, 10]:
+        for epochs in [100]:
+            for n_ants in [100]:
+                for alpha in [1.2, 1.5]:
+                    for beta in [0.1]:
+                        for p in [0.5, 100]:
+                            for init_pher in [0.5]:
                                 # print (case['name'])
                                 # print(epochs)
                                 # print(n_ants)
@@ -52,7 +52,7 @@ def get_all_results(cases):
                                     best_cost = result[1]
                                     best_sol = result[2]
         write_result(case, best_sol, best_cost)
-    df.to_csv('./data/results.csv')
+    df.to_csv('./data/' + results_file)
     return df
 
 def write_result(case, best_sol, best_cost):

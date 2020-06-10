@@ -8,6 +8,8 @@ def get_adj_matrix(coord):
         for j in range(i + 1, len(coord)):
             adj_matrix[i, j] = adj_matrix[j, i] = np.sqrt((coord[i][0] - coord[j][0])**2 +
                                                           (coord[i][1] - coord[j][1])**2)
+            if adj_matrix[i, j] == 0:
+                adj_matrix[i, j] = adj_matrix[j, i] = 0.01
     return adj_matrix
 
 def get_data(file_name):
@@ -39,17 +41,17 @@ def get_data(file_name):
 
         case_dict['adj_matrix'] = get_adj_matrix(coord)
 
-        if case_dict['n_trucks'] * case_dict['capacity'] < case_dict['sum_demand']:
-            print(case_dict['name'], '- ERROR_CAPACITY!')
-            return None
-
-        if len(set(coord)) < case_dict['dimension']:
-            print(case_dict['name'], '- ERROR_COORDINATES!')
-            for i in range(len(coord)):
-                for j in range(i + 1, len(coord)):
-                    if coord[i] == coord[j]:
-                        print(i + 1, '-', j + 1)
-            return None
+        # if case_dict['n_trucks'] * case_dict['capacity'] < case_dict['sum_demand']:
+        #     print(case_dict['name'], '- ERROR_CAPACITY!')
+        #     return None
+        #
+        # if len(set(coord)) < case_dict['dimension']:
+        #     print(case_dict['name'], '- ERROR_COORDINATES!')
+        #     for i in range(len(coord)):
+        #         for j in range(i + 1, len(coord)):
+        #             if coord[i] == coord[j]:
+        #                 print(i + 1, '-', j + 1)
+        #     return None
 
         print(case_dict['name'], ' is done!')
 

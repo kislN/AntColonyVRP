@@ -20,12 +20,15 @@ for file in files_B:
     if case:
         cases.append(case)
 
+# np.random.seed(41)
 # print(len(cases))
-# i = 11
-# for i in range(len(cases[0:1])):
-#     print(cases[i]['name'])
-#     test = VPR(cases[i]['n_trucks'], cases[i]['dimension'], cases[i]['capacity'], cases[i]['demands'], cases[i]['adj_matrix'])
-#     test.compute(10, 10, 4, 0.1, 0.5, 10)
-#     print()
+# i = 12
+# # for i in range(len(cases[1:2])):
+# print(cases[i]['name'])
+# test = VPR(cases[i]['n_trucks'], cases[i]['dimension'], cases[i]['capacity'], cases[i]['demands'], cases[i]['adj_matrix'])
+# test.compute(100, 50, 1.2, 0.1, 100, 50)
+# print()
 
-df = get_all_results(cases)
+i = 7
+j = 9
+df = get_all_results(cases[i: j], 'results' + str(i) + '_' + str(j - 1) + '.csv')
