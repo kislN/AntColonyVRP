@@ -14,19 +14,20 @@ class VPR:
         self.demands = demands
         self.adj_matrix = adj_matrix
         self.adj_matrix_sum = adj_matrix.sum()
+        self.final_cost = self.adj_matrix_sum
+        self.final_sol = None
 
-        self.init_pheramone_value = None
-        self.pheramone_map = None
+        self.epochs = None
+        self.n_ants = None
         self.alpha = None
         self.beta = None
-        self.epoches = None
-        self.tabu = None
-        self.capacity_left = None
         self.p = None
-        self.best_ant_sol = None
+        self.init_pheromone_value = None
+        self.pheromone_map = None
         self.raw_prob_matrix = None
-        self.k = None
-        self.potential_vertexes = None
+        self.tabu = None
+        self.tabu_sum = None
+        self.capacity_left = None
 
     def get_probality(self, raw_prob_list):
         prob_list = raw_prob_list/raw_prob_list.sum()
@@ -45,19 +46,19 @@ class VPR:
         return 0
 
     def local_update(self, i, j):
-        self.pheramone_map[i, j] += self.p * self.init_pheramone_value / self.adj_matrix[i, j]
-        self.pheramone_map[j, i] = self.pheramone_map[i, j]
-        self.raw_prob_matrix[i, j] = self.raw_prob_matrix[j, i] = (self.pheramone_map[i, j]**self.alpha) * \
+        self.pheromone_map[i, j] += self.p * self.init_pheromone_value / self.adj_matrix[i, j]
+        self.pheromone_map[j, i] = self.pheromone_map[i, j]
+        self.raw_prob_matrix[i, j] = self.raw_prob_matrix[j, i] = (self.pheromone_map[i, j] ** self.alpha) * \
                                                                   (self.adj_matrix[i, j]**self.beta)
 
     def global_update(self, best_solution, best_cost):
         for one_path in best_solution:
             for i in range(len(one_path)-1):
-                self.pheramone_map[one_path[i], one_path[i + 1]] += self.p * self.capacity / best_cost
-                self.pheramone_map[one_path[i + 1], one_path[i]] = self.pheramone_map[one_path[i], one_path[i + 1]]
+                self.pheromone_map[one_path[i], one_path[i + 1]] += self.p * self.capacity / best_cost
+                self.pheromone_map[one_path[i + 1], one_path[i]] = self.pheromone_map[one_path[i], one_path[i + 1]]
                 self.raw_prob_matrix[one_path[i], one_path[i + 1]] = \
                     self.raw_prob_matrix[one_path[i + 1], one_path[i]] = \
-                    (self.pheramone_map[one_path[i], one_path[i + 1]] ** self.alpha) * \
+                    (self.pheromone_map[one_path[i], one_path[i + 1]] ** self.alpha) * \
                     (self.adj_matrix[one_path[i], one_path[i + 1]] ** self.beta)
 
     def get_cost(self, solution):
@@ -66,28 +67,23 @@ class VPR:
             current_cost += self.adj_matrix[solution[i], solution[i + 1]]
         return current_cost
 
-    def compute(self, epoches=5, k=10, alpha=0.9, beta=0.1, p=100, init_pheramone=1):
-        self.epoches = epoches
-        self.k = k
+    def compute(self, epochs=20, n_ants=50, alpha=0.9, beta=0.1, p=100, init_pheromone=1):
+        self.epochs = epochs
+        self.n_ants = n_ants
         self.alpha = alpha
         self.beta = beta
         self.p = p
-        self.init_pheramone_value = init_pheramone
-
-        self.pheramone_map = np.full(shape=(self.dimension, self.dimension), fill_value=self.init_pheramone_value)
-        np.fill_diagonal(self.pheramone_map, 0)
-        self.raw_prob_matrix = (self.pheramone_map ** self.alpha) * (self.adj_matrix ** self.beta)
-
-        self.tabu_sum = None
+        self.init_pheromone_value = init_pheromone
+        self.pheromone_map = np.full(shape=(self.dimension, self.dimension), fill_value=self.init_pheromone_value)
+        np.fill_diagonal(self.pheromone_map, 0)
+        self.raw_prob_matrix = (self.pheromone_map ** self.alpha) * (self.adj_matrix ** self.beta)
 
         show_epoch = []
-        iam_the_best_of_the_best_cost = self.adj_matrix_sum
-        iam_the_best_of_the_best_sol = None
-        for epoch in range(self.epoches):
+        for epoch in range(self.epochs):
             time_s = time()
             best_solution = None
             best_cost = self.adj_matrix_sum
-            for ant in range(self.k):
+            for ant in range(self.n_ants):
                 current_state = 0
                 solutions = []
                 one_path_solution = [0]
@@ -113,7 +109,6 @@ class VPR:
 
                 one_path_solution.append(0)
                 solutions.append(one_path_solution)
-
                 cost = sum([self.get_cost(sol) for sol in solutions])  # TODO: optimise
 
                 assert all(np.unique(np.hstack(solutions)) == np.arange(self.dimension))
@@ -131,18 +126,18 @@ class VPR:
                 print('global fuck')
             else:
                 self.global_update(best_solution, best_cost)
-
                 show_epoch.append(best_cost)
-                if iam_the_best_of_the_best_cost > best_cost:
-                    iam_the_best_of_the_best_cost = best_cost
-                    iam_the_best_of_the_best_sol = best_solution
+                if self.final_cost > best_cost:
+                    self.final_cost = best_cost
+                    self.final_sol = best_solution
+                # print(f'Epoch: {epoch} | time: {round(time() - time_s, 4)}| best cost: {best_cost}')
 
-                print(f'Epoch: {epoch} | time: {round(time() - time_s, 4)}| best cost: {best_cost}')
-
-        print(self.alpha, self.beta, self.p, self.k)
-        plt.plot(np.arange(len(show_epoch)), np.array(show_epoch))
-        plt.show()
-        print(iam_the_best_of_the_best_sol)
-        print(f'Cost: {iam_the_best_of_the_best_cost}')
+        # print(self.alpha, self.beta, self.p, self.k)
+        # plt.plot(np.arange(len(show_epoch)), np.array(show_epoch))
+        # plt.show()
+        if self.final_sol is None:
+            print('WORLD WIDE FUCK')
+        # print(self.final_sol)
+        # print(f'Cost: {self.final_cost}')
 
 
