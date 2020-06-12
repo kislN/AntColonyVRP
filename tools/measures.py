@@ -30,11 +30,11 @@ def get_all_results(cases):
         best_cost = 1e+5
         best_sol = None
         for epochs in [100]:
-            for n_ants in [100]:
-                for alpha in [1.2, 1.5]:
-                    for beta in [0.1]:
-                        for p in [0.5, 100]:
-                            for init_pher in [0.5]:
+            for n_ants in [50, 100]:
+                for alpha in [1.5]:
+                    for beta in [0.1, 0.3]:
+                        for p in [0.95]:
+                            for init_pher in [10, 1000]:
                                 # print (case['name'])
                                 # print(epochs)
                                 # print(n_ants)
