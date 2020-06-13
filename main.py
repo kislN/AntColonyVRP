@@ -22,12 +22,9 @@ for file in files_B:
 
 # np.random.seed(42)
 print(len(cases))
-# i = 12
-# # for i in range(len(cases[1:2])):
-# print(cases[i]['name'])
-# test = VPR(cases[i]['n_trucks'], cases[i]['dimension'], cases[i]['capacity'], cases[i]['demands'], cases[i]['adj_matrix'])
-# test.compute()
-# print(test.final_cost)
+i = 12
+print(cases[i]['name'])
+test = VPR(cases[i]['n_trucks'], cases[i]['dimension'], cases[i]['capacity'], cases[i]['demands'], cases[i]['adj_matrix'])
+test.compute()
+print(test.final_cost)
 
-
-# get_all_results(cases[0:2])

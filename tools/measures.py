@@ -25,7 +25,7 @@ def get_result(case, iterations=3, **params):
 def get_all_results(cases):
     iters = 1
     for case in tqdm(cases):
-        df = pd.DataFrame(columns=['case', 'epochs', 'n_ants', 'alpha', 'beta', 'p', 'init_pher', 'mean_time',
+        df = pd.DataFrame(columns=['case', 'epochs', 'n_ants', 'alpha', 'beta', 'rho', 'init_pher', 'mean_time',
                                    'found_cost', 'opt_cost'])
         best_cost = 1e+5
         best_sol = None
@@ -33,18 +33,11 @@ def get_all_results(cases):
             for n_ants in [50, 100]:
                 for alpha in [1.5]:
                     for beta in [0.1, 0.3]:
-                        for p in [0.95]:
+                        for rho in [0.95]:
                             for init_pher in [10, 1000]:
-                                # print (case['name'])
-                                # print(epochs)
-                                # print(n_ants)
-                                # print(alpha)
-                                # print(beta)
-                                # print(p)
-                                # print(init_pher)
                                 result = get_result(case, iterations=iters, epochs=epochs, n_ants=n_ants, alpha=alpha,
-                                                    beta=beta, p=p, init_pheromone=init_pher)
-                                df = df.append(pd.Series([case['name'], epochs, n_ants, alpha, beta, p, init_pher,
+                                                    beta=beta, rho=rho, init_pheromone=init_pher)
+                                df = df.append(pd.Series([case['name'], epochs, n_ants, alpha, beta, rho, init_pher,
                                                           result[0], round(result[1], 4), case['opt']],
                                                          index=df.columns), ignore_index=True)
 
@@ -60,10 +53,10 @@ def write_result(case, best_sol, best_cost):
     file_name = case['name'] + '.sol'
 
     sol_str = ''
-    for i in range(case['n_trucks']):           # FOR CHECKING OF SIZES
+    for i in range(case['n_trucks']):
         sol_str += 'Route #' + str(i + 1) + ':'
         for j in best_sol[i]:
-            sol_str += ' ' + str(j + 1)         # i'm not sure that we should put the depot twice
+            sol_str += ' ' + str(j)
         sol_str += '\n'
     sol_str += 'cost ' + str(best_cost)
 

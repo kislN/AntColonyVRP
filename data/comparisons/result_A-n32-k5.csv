@@ -1,2 +1,0 @@
-,case,epochs,n_ants,alpha,beta,p,init_pher,mean_time,found_cost,opt_cost
-0,A-n32-k5,100,10,1.2,0.1,0.5,0.5,3.7636,1313.3357,784.0
