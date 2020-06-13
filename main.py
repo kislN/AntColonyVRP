@@ -3,6 +3,7 @@ from os.path import join
 import os
 from algorithms.ant_colony import VPR
 from tools.data_loader import get_data
+from tools.measures import get_all_results
 
 files_A = os.listdir('./data/benchmark/A')
 files_A.sort()
@@ -19,9 +20,11 @@ for file in files_B:
     if case:
         cases.append(case)
 
-i = 11
-for i in range(len(cases)):
-    print(cases[i]['name'])
-    test = VPR(cases[i]['n_trucks'], cases[i]['dimension'], cases[i]['capacity'], cases[i]['demands'], cases[i]['adj_matrix'])
-    test.compute()
-    print()
+# np.random.seed(42)
+print(len(cases))
+i = 12
+print(cases[i]['name'])
+test = VPR(cases[i]['n_trucks'], cases[i]['dimension'], cases[i]['capacity'], cases[i]['demands'], cases[i]['adj_matrix'])
+test.compute()
+print(test.final_cost)
+
